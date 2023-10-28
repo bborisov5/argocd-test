@@ -1,34 +1,22 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-world
+  name: nginx
 spec:
-  replicas: 3
   selector:
     matchLabels:
-      app: hello-world
-  strategy:
-    type: Recreate
+      app: myapp
+  replicas: 2
   template:
     metadata:
       labels:
-        app: hello-world
+        app: myapp
     spec:
       containers:
-      - image: nginxdemos/hello
-        name: hello-world
-        resources:
-          requests:
-            memory: "128Mi"
-            cpu: "250m"
-          limits:
-            memory: "384Mi"
-            cpu: "500m"
+      - name: nginx
+        image: nginx:latest
         ports:
         - containerPort: 80
-          protocol: TCP
-          name: hello-world
 ---
 apiVersion: v1
 kind: Service
@@ -40,5 +28,5 @@ spec:
     app: myapp
   ports:
     - protocol: TCP
-      port: 8080
+      port: 80
       targetPort: 80
